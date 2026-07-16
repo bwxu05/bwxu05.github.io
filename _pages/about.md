@@ -2,15 +2,15 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Undergraduate Student at [Renmin University of China](https://ruc.edu.cn)
+subtitle: Undergraduate Student at <a href='https://ruc.edu.cn'>Renmin University of China</a>.
 
 profile:
   align: right
   image: myphoto.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
-    <p>Renmin University of China</p>
-    <p>59 Zhongguancun Street</p>
+    <p>Renmin University of China, </p>
+    <p>59 Zhongguancun Street, </p>
     <p>Beijing</p>
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
