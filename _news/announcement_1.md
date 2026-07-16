@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-My personal website is now live.
+My personal website is now live!
