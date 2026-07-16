@@ -1,5 +1,5 @@
 ---
-layout: about
+layout: About
 title: About
 permalink: /
 subtitle: Undergraduate Student at <a href='https://ruc.edu.cn'>Renmin University of China</a>.
