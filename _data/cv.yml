@@ -4,14 +4,6 @@ cv:
   email: bwxu2005@gmail.com
   location: Renmin University of China, Beijing
 
-  social_networks:
-    - network: X
-      username: 
-    - network: GitHub
-      username: bwxu05
-    - network: LinkedIn
-      username: 
-
   address:
     street: 59 Zhongguancun Street
     city: Beijing
@@ -25,7 +17,7 @@ cv:
         location: Beijing, China
         url: https://www.ruc.edu.cn
         area: Honors Class for Statistics (Statistics and Data Science)
-        studyType: Undergraduate
+        studyType: Undergraduate Student
         start_date: 2023-09
         end_date: 2027-06
         score: ""
