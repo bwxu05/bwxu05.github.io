@@ -58,7 +58,7 @@ cv:
         date: 2025
         awarder: Chinese Mathematics Competition (CMC)
         
-      - title: The First Prize Scholarship for Academic Excellenc
+      - title: The First Prize Scholarship for Academic Excellence
         date: 2024
         awarder:  Renmin University of China
 
@@ -66,9 +66,9 @@ cv:
         date: 2024
         awarder:  China Undergraduate Mathematical Contest in Modeling (CUMCM)
 
-      - title: First Prize (Heibei), CPhO 
+      - title: First Prize (Hebei), CPhO 
         date: 2022
-        awarder:  Chinese Physics Olympiad (CPhO), Heibei Province
+        awarder:  Chinese Physics Olympiad (CPhO), Hebei Province
         
         
     # Publications:
