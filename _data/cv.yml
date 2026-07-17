@@ -3,8 +3,6 @@ cv:
   label: Undergraduate Student
   email: bwxu2005@gmail.com
   location: Renmin University of China, Beijing
-  image: ""
-  summary: An undergraduate student at School of Statistics, Renmin University of China, where I am in the Honors Class for Statistics (Statistics and Data Science). I am interested in machine learning and deep learning theory.
 
   social_networks:
     - network: X
@@ -17,7 +15,7 @@ cv:
   address:
     street: 59 Zhongguancun Street
     city: Beijing
-    region: Beijing
+    region:
     postalCode: 100872
     countryCode: China
 
@@ -37,16 +35,17 @@ cv:
         position: Research Intern advised by Prof. Chongxuan Li.
         location: Beijing, China
         start_date: 2024-12
-        end_date: Now
+        end_date: Present
         summary: Deep Learning Theory research on training dynamics of neural networks and optimizers.
         highlights:
           - PhD Seminar on High-Dimensional Probability
 
       - company: Institute of Statistics and Big Data, Renmin University of China
-        position: Participant in the Short Course on Statistical Deep Learning and Generative Models delivered by Prof. Jian Huang
+        position: Short Course Participant
         location: Beijing, China
         start_date: 2025
         end_date: 2025
+        summary: Short Course on Statistical Deep Learning and Generative Models delivered by Prof. Jian Huang
 
     # Volunteer:
     #   - company: 
@@ -111,15 +110,15 @@ cv:
     #     icon: fa-solid fa-hashtag
     #     keywords: "Quantum Mechanics, Quantum Computing, Quantum Information, Quantum Cryptography, Quantum Communication, Quantum Teleportation"
 
-    Languages:
-      - name: Chinese
-        summary: "Native speaker"
+    # Languages:
+    #   - name: Chinese
+    #     summary: "Native speaker"
 
-      - name: English
-        summary: "Fluent"
+    #   - name: English
+    #     summary: "Fluent"
 
-      - name: French
-        summary: "Starter"
+    #   - name: French
+    #     summary: "Starter"
 
     # Interests:
     #   - name: Physics
