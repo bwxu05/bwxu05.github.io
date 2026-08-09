@@ -2,18 +2,18 @@
 layout: post
 title: Neural Network Initializations and NNGP
 date: 2026-08-09
-description: 从初始化尺度到无限宽高斯过程：用 mean-field / DMFT 技术推导 NNGP
+description: 从随机初始化到无限宽神经网络：NNGP 的 DMFT 推导
 tags: pre-training scaling muP optimizer
 categories: muP-Theory
 chart:
   chartjs: true
 ---
 
-神经网络的 initialization 不只是一个数值稳定性问题。对于随机初始化的宽网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在相当一般的条件下收敛到 Gaussian Process (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
+对于大语言模型的预训练，神经网络的初始化不只是一个数值稳定性问题，更深刻影响神经网络的 feature learning 能力。对于随机初始化的宽神经网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在一定条件下收敛到高斯过程 (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
 
-Lee et al. [3] 给出了经典的逐层 Central Limit Theorem (CLT) 推导。这里采用另一种更接近 statistical physics / DMFT 的视角：把随机初始化的权重视为 quenched disorder，引入 preactivation fields、conjugate fields 和 macroscopic kernel order parameters，再在 $N\to\infty$ 时通过 saddle point 得到一个 single-site effective theory。这个推导与 Pehlevan--Bordelon lecture notes [2] Appendix A 的思路一致。
+Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序动力系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon lecture notes [2] Appendix A 的思路一致。
 
-严格地说，NNGP 只涉及 initialization，因此这里没有真实的时间变量；它可以看作 dynamical mean-field construction 在 $t=0$ 的 **static mean-field sector**。但它已经包含了 DMFT 最核心的结构：
+严格地说，NNGP 只涉及初始化，因此这里没有真实的时间变量；它可以看作 DMFT 在 $t=0$ 的 **static mean-field sector**。但它已经包含了 DMFT 最核心的结构：
 
 $$
 \text{disorder average}
@@ -29,7 +29,7 @@ $$
 
 ## 1. Initialization scaling: why $1/\sqrt{N}$?
 
-考虑一个 fully-connected network。对 hidden layers 取宽度 $N$，输入维度为 $D$。先忽略 bias：
+考虑一个全连接神经网络。对隐藏层取宽度 $N$，输入维度为 $D$。先忽略 bias：
 
 $$
 h_{\mu i}^{(1)}
@@ -70,7 +70,7 @@ $$
 N^{1-2a_\ell-b_\ell}.
 $$
 
-因此 finite, non-degenerate preactivations 要求 [2]
+因此有限、非退化的 preactivations 要求 [2]
 
 $$
 \boxed{2a_\ell+b_\ell=1.}
@@ -89,7 +89,7 @@ $$
 W_{ij}\sim\mathcal N\!\left(0,\frac{1}{N}\right)
 $$
 
-而不额外写 $1/\sqrt N$。这就是 Xavier/He 等 initialization 中 fan-in scaling 的 mean-field 本质：**每个 neuron 接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
+而不额外写 $1/\sqrt N$。这就是 Xavier/He 等 initialization 中 fan-in scaling 的 mean-field 本质：**每个神经元接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
 
 ## 2. The object that survives at infinite width
 
@@ -111,7 +111,7 @@ $$
 \frac{1}{D}x_\mu^\top x_\nu.
 $$
 
-NNGP 的核心结论是：当 $N\to\infty$ 时，$\Phi^{(\ell)}$ self-average 到 deterministic quantity；与此同时，每一个 neuron 的 preactivation vector
+NNGP 的核心结论是：当 $N\to\infty$ 时，$\Phi^{(\ell)}$ self-average 到确定量；与此同时，每一个神经元的 preactivation vector
 
 $$
 \mathbf h_i^{(\ell)}
@@ -142,13 +142,13 @@ $$
 }
 $$
 
-这已经是 NNGP kernel recursion。下面用 DMFT / field-theoretic 方法得到它。
+这已经是 NNGP 核。下面用 DMFT 方法作推导。
 
 ## 3. DMFT derivation of the NNGP
 
 ### 3.1 Generating function for preactivations
 
-我们希望得到所有 preactivations 的 joint distribution。引入 source fields $b_{\mu i}^{(\ell)}$，定义 characteristic generating function（其对数 $\log Z$ 生成 cumulants）
+我们希望得到所有 preactivations 的联合分布。引入 source fields $b_{\mu i}^{(\ell)}$，定义矩母函数
 
 $$
 Z[b]
@@ -162,11 +162,11 @@ Z[b]
 \right).
 $$
 
-如果能够在 $N\to\infty$ 时求出 $Z[b]$，就等价于确定 preactivation fields 的全部 finite-dimensional distributions。
+如果能够在 $N\to\infty$ 时求出 $Z[b]$，就等价于确定 preactivation fields 的全部有限维分布。
 
 ### 3.2 Enforce the network equations with delta functions
 
-以下对 hidden-to-hidden layers 写成 $1/\sqrt N$；第一层完全相同，只需把 $N$ 换成 $D$，并把 fixed input covariance 记为 $\Phi^{(0)}$.
+以下对 hidden-to-hidden layers 写成 $1/\sqrt N$；第一层完全相同，只需把 $N$ 换成 $D$，并把固定的输入协方差核记为 $\Phi^{(0)}$.
 
 forward equations 是确定性约束。对每一层插入
 
@@ -228,7 +228,7 @@ $$
 \right].
 $$
 
-这是关键一步。原来 $N^2$ 个 microscopic random weights 的影响，被压缩成了一个 $P\times P$ 的 macroscopic object：
+这是关键一步。原来 $N^2$ 个微关无序变量的影响，被压缩成了一个 $P\times P$ 的宏观对象：
 
 $$
 \Phi_{\mu\nu}^{(\ell-1)}
@@ -238,11 +238,11 @@ $$
 \phi(\mathbf h_{\nu}^{(\ell-1)}).
 $$
 
-换句话说，在 disorder average 之后，网络只通过 layerwise feature kernel 记住上一层。
+换句话说，在对无序取平均后之后，网络只通过逐层特征核记忆上一层。
 
 ### 3.4 Promote the empirical kernel to an order parameter
 
-接下来把 $\Phi^{(\ell)}$ 当作独立的 macroscopic order parameter，再用 delta function 强制其定义：
+接下来把 $\Phi^{(\ell)}$ 当作独立的序参量，再用 delta function 强制其定义：
 
 $$
 1
@@ -262,7 +262,7 @@ N\Phi_{\mu\nu}^{(\ell)}
 \right\}.
 $$
 
-这样做以后，所有 neuron index $i$ 的积分都 factorize。生成泛函具有标准 mean-field 形式 [2]
+这样做以后，所有 neuron index $i$ 的积分都 factorize。生成泛函具有标准“平均场”形式 [2]
 
 $$
 Z[b]
@@ -319,9 +319,9 @@ $$
 
 这一步就是 high-dimensional network $\rightarrow$ single-site effective theory 的核心 reduction。
 
-### 3.5 Infinite width = saddle point
+### 3.5 Infinite width limit
 
-因为整个 exponent 是 $N S$，所以
+因为整个指数是 $N S$，所以
 
 $$
 N\to\infty
@@ -341,7 +341,7 @@ $$
 \frac{\partial S}{\partial \hat\Phi_{\mu\nu}^{(\ell)}}=0.
 $$
 
-第二个 saddle equation 直接给出 self-consistency：
+第二个鞍点方程直接给出 self-consistency：
 
 $$
 \Phi_{\mu\nu}^{(\ell)}
@@ -353,13 +353,13 @@ $$
 \right\rangle_i.
 $$
 
-而第一个 saddle equation 给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的 moments，在 $N\to\infty$ 时，一个一致的 saddle 是 [2]
+而第一个鞍点方程给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的 moments，在 $N\to\infty$ 时，一个一致的 saddle 是 [2]
 
 $$
 \boxed{\hat\Phi_{\mu\nu}^{(\ell)}=0.}
 $$
 
-直观上，只有 $O(1)$ 个 sites 被 sources 直接扰动，而其余 $N-O(1)$ 个 sites 在 zero source 下相同；这些 bulk sites 决定 saddle，因此 source 不会在 leading order 改变 macroscopic kernel。
+直观上，只有 $O(1)$ 个 sites 被 sources 直接扰动，而其余 $N-O(1)$ 个 sites 在 zero source 下相同；这些 bulk sites 决定鞍点，因此 source 不会在 leading order 改变宏观核。
 
 ### 3.6 The effective single-site theory is Gaussian
 
@@ -385,7 +385,7 @@ z^{(\ell)}(b)
 \end{aligned}
 $$
 
-这正是 multivariate Gaussian 的 characteristic function。因此
+这正是多元高斯分布的矩母函数。因此
 
 $$
 \boxed{
@@ -395,7 +395,7 @@ $$
 }
 $$
 
-并且不同 neurons $i$ 在 infinite-width saddle 上 iid。代回 self-consistency equation：
+并且不同神经元 $i$ 在无穷宽极限的鞍点上 iid。代回 self-consistency equation：
 
 $$
 \boxed{
@@ -410,11 +410,11 @@ $$
 }
 $$
 
-这就是 NNGP recursion。
+这就是 NNGP 的迭代。
 
 ## 4. Recovering the standard NNGP kernel
 
-Lee et al. [3] 更常用的 parameterization 是
+Lee et al. [3] 更常用的参数化是
 
 $$
 h_i^{(\ell)}(x)
@@ -447,7 +447,7 @@ K^{(1)}(x,x')
 }
 $$
 
-后续各层满足 deterministic recursion [3]
+后续各层满足确定性迭代 [3]
 
 $$
 \boxed{
@@ -472,19 +472,19 @@ K^{(\ell-1)}(x',x) & K^{(\ell-1)}(x',x')
 \end{pmatrix}.
 $$
 
-对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的 joint distribution 都是 multivariate Gaussian。若把最终 scalar affine output 也计作第 $L$ 层，则在 function space 中
+对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的联合分布都是多元高斯分布。若把最终 scalar affine output 也计作第 $L$ 层，则在函数空间中
 
 $$
 \boxed{f(\cdot)\sim\mathrm{GP}(0,K^{(L)}).}
 $$
 
-若 $L$ 只计 hidden layers，则相同公式对应 output kernel $K^{(L+1)}$.
+若 $L$ 只计隐藏层，则相同公式对应输出核 $K^{(L+1)}$.
 
-Lee et al. [3] 的 CLT 推导与上面的 DMFT 推导得到完全相同的 recursion：CLT 是逐层证明 Gaussianity；DMFT 则进一步把 Gaussianity、kernel self-averaging 和 single-site reduction 统一到同一个 saddle-point formalism 中。
+Lee et al. [3] 的 CLT 推导与上面的 DMFT 推导得到完全相同的迭代：CLT 是逐层证明高斯性；DMFT 则进一步把 Gaussianity、kernel self-averaging 和 single-site reduction 统一到同一个 saddle-point formalism 中。
 
 ## 5. Initialization as a kernel design problem
 
-NNGP 让 initialization 的作用变得非常直接：$\sigma_w,\sigma_b$ 和 nonlinearity $\phi$ 决定了 kernel map
+NNGP 让随机初始化的作用变得非常直接：$\sigma_w,\sigma_b$ 和 nonlinearity $\phi$ 决定了核映射
 
 $$
 K^{(\ell-1)}
@@ -492,7 +492,7 @@ K^{(\ell-1)}
 K^{(\ell)}.
 $$
 
-因此 initialization 不仅影响 gradient scale，也决定了网络在训练前偏好的 function space。
+因此初始化不仅影响梯度，也决定了网络在训练前偏好的函数空间。
 
 ### Linear activation
 
@@ -502,13 +502,13 @@ $$
 K^{(\ell)}=\sigma_w^2K^{(\ell-1)}.
 $$
 
-要保持 depth 增加时的 variance scale，需要
+要保持深度增加时的方差标度，需要
 
 $$
 \sigma_w^2=1,
 $$
 
-即 equal-width 情形下的 Xavier-like scaling。
+即等宽情形下的 Xavier-like scaling。
 
 ### ReLU and He initialization
 
@@ -547,9 +547,9 @@ $$
 =\frac{2}{N},
 $$
 
-这正是 He initialization 的 mean-field 解释。
+这正是 He initialization 的平均场解释。
 
-更进一步，ReLU 的 off-diagonal kernel 也有 closed form。令
+更进一步，ReLU 的 off-diagonal kernel 也有闭式解。令
 
 $$
 \cos\theta
@@ -569,39 +569,21 @@ $$
 \right].
 $$
 
-因此一个随机初始化的 infinitely-wide ReLU network 对应一个完全确定的 compositional arccosine kernel。
+因此一个随机初始化的无穷宽 ReLU network 对应一个完全确定的 compositional arccosine kernel。
 
 ## 6. What NNGP does — and does not — say
 
-NNGP 描述的是**随机初始化所诱导的 function prior**，而不是一般 feature-learning training dynamics。
+NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般 feature-learning training dynamics。
 
 - **NNGP:** $f(\cdot)$ 在 initialization 上的分布；核心对象是 covariance kernel $K^{(\ell)}$。
 - **NTK:** parameter Jacobian 的 Gram kernel；在 lazy / kernel regime 中控制 gradient-flow prediction dynamics [5]。
 - **DMFT for feature learning:** kernel 本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。
 
-因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成一个 deterministic kernel recursion；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个 static mean-field theory 扩展为真正的 dynamical mean-field theory。
-
-## 7. Takeaway
-
-NNGP 最值得记住的不是“宽网络等价于 GP”这一句话，而是背后的结构：
-
-$$
-\boxed{
-\text{random initialization}
-\xrightarrow{N\to\infty}
-\text{self-averaging kernel}
-\xrightarrow{\text{saddle point}}
-\text{Gaussian single-site field}
-\xrightarrow{\text{self-consistency}}
-\text{NNGP recursion}.
-}
-$$
-
-从这个角度看，Xavier/He initialization、NNGP、NTK 以及 feature-learning DMFT 并不是彼此孤立的理论。它们都在回答同一个问题：**当神经网络的 width 很大时，哪些 microscopic details 会消失，哪些 macroscopic order parameters 会保留下来，并控制最终的函数与训练动力学？**
+因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成一个 deterministic kernel recursion；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
 
 ## References
 
-1. <a id="ref1"></a>Radford M. Neal. *Priors for Infinite Networks*. In **Bayesian Learning for Neural Networks**, Springer, 1996.
+1. <a id="ref1"></a>Radford M. Neal. *Priors for Infinite Networks*. In Bayesian Learning for Neural Networks, Springer, 1996.
 2. <a id="ref2"></a>Cengiz Pehlevan and Blake Bordelon. *Lecture Notes on Infinite-Width Limits of Neural Networks*. Princeton Machine Learning Summer School, 2023.
 3. <a id="ref3"></a>Jaehoon Lee, Yasaman Bahri, Roman Novak, Samuel S. Schoenholz, Jeffrey Pennington, and Jascha Sohl-Dickstein. *Deep Neural Networks as Gaussian Processes*. ICLR, 2018. arXiv:1711.00165.
 4. <a id="ref4"></a>Youngmin Cho and Lawrence K. Saul. *Kernel Methods for Deep Learning*. NeurIPS, 2009.
