@@ -1,0 +1,134 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Neural Network Initializations and NNGP | Bowen Xu </title> <meta name="author" content="Bowen Xu"> <meta name="description" content="从初始化尺度到无限宽高斯过程：用 mean-field / DMFT 技术推导 NNGP"> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 930px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://bwxu05.github.io/blog/2026/neural-network-initializations-and-nngp-2/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Bowen</span> Xu </a> <button class="navbar-toggler collapsed navbar-toggler-main" type="button" data-nav-toggle="navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse navbar-collapse-main" id="navbarNav"> <ul class="navbar-nav navbar-menu-list flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">About </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">Blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/">CV </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Neural Network Initializations and NNGP</h1> <p class="post-meta"> Created on August 09, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/pre-training"> <i class="fa-solid fa-hashtag fa-sm"></i> pre-training</a>   <a href="/blog/tag/scaling"> <i class="fa-solid fa-hashtag fa-sm"></i> scaling</a>   <a href="/blog/tag/mup"> <i class="fa-solid fa-hashtag fa-sm"></i> muP</a>   <a href="/blog/tag/optimizer"> <i class="fa-solid fa-hashtag fa-sm"></i> optimizer</a>   ·   <a href="/blog/category/mup-theory"> <i class="fa-solid fa-tag fa-sm"></i> muP-Theory</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>神经网络的 initialization 不只是一个数值稳定性问题。对于随机初始化的宽网络，参数分布会诱导一个<strong>随机函数分布</strong>；当宽度趋于无穷时，这个函数分布在相当一般的条件下收敛到 Gaussian Process (GP)。对应的核通常称为 <strong>Neural Network Gaussian Process (NNGP) kernel</strong> [1–3]。</p> <p>Lee et al. [3] 给出了经典的逐层 Central Limit Theorem (CLT) 推导。这里采用另一种更接近 statistical physics / DMFT 的视角：把随机初始化的权重视为 quenched disorder，引入 preactivation fields、conjugate fields 和 macroscopic kernel order parameters，再在 $N\to\infty$ 时通过 saddle point 得到一个 single-site effective theory。这个推导与 Pehlevan–Bordelon lecture notes [2] Appendix A 的思路一致。</p> <p>严格地说，NNGP 只涉及 initialization，因此这里没有真实的时间变量；它可以看作 dynamical mean-field construction 在 $t=0$ 的 <strong>static mean-field sector</strong>。但它已经包含了 DMFT 最核心的结构：</p> \[\text{disorder average} \;\longrightarrow\; \text{order parameters} \;\longrightarrow\; N\,S \;\longrightarrow\; \text{saddle point} \;\longrightarrow\; \text{effective single-site process}.\] <h2 id="1-initialization-scaling-why-1sqrtn">1. Initialization scaling: why $1/\sqrt{N}$?</h2> <p>考虑一个 fully-connected network。对 hidden layers 取宽度 $N$，输入维度为 $D$。先忽略 bias：</p> \[h_{\mu i}^{(1)} = \frac{1}{\sqrt D}\sum_{j=1}^{D}W_{ij}^{(1)}x_{\mu j},\] \[h_{\mu i}^{(\ell)} = \frac{1}{\sqrt N}\sum_{j=1}^{N} W_{ij}^{(\ell)}\phi\!\left(h_{\mu j}^{(\ell-1)}\right), \qquad \ell\ge 2,\] <p>其中 $\mu,\nu$ index inputs，$i,j$ index neurons，并假设</p> \[W_{ij}^{(\ell)}\overset{\mathrm{i.i.d.}}{\sim}\mathcal N(0,1).\] <p>为什么必须有 $1/\sqrt N$？更一般地，若写成</p> \[h_i^{(\ell)} = N^{-a_\ell}\sum_{j=1}^{N} W_{ij}^{(\ell)}\phi(h_j^{(\ell-1)}), \qquad \operatorname{Var}(W_{ij}^{(\ell)})=N^{-b_\ell},\] <p>则在上一层 activation 具有 $O(1)$ 二阶矩时，</p> \[\operatorname{Var}(h_i^{(\ell)}) \sim N^{1-2a_\ell-b_\ell}.\] <p>因此 finite, non-degenerate preactivations 要求 [2]</p> \[\boxed{2a_\ell+b_\ell=1.}\] <p>常见的两种写法其实等价：</p> \[\frac{1}{\sqrt N}W, \quad W_{ij}\sim\mathcal N(0,1),\] <p>或者</p> \[W_{ij}\sim\mathcal N\!\left(0,\frac{1}{N}\right)\] <p>而不额外写 $1/\sqrt N$。这就是 Xavier/He 等 initialization 中 fan-in scaling 的 mean-field 本质：<strong>每个 neuron 接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。</strong></p> <h2 id="2-the-object-that-survives-at-infinite-width">2. The object that survives at infinite width</h2> <p>对一组有限输入 ${x_\mu}_{\mu=1}^{P}$，定义 layer-$\ell$ 的 empirical feature kernel</p> \[\Phi_{\mu\nu}^{(\ell)} \equiv \frac{1}{N}\sum_{i=1}^{N} \phi(h_{\mu i}^{(\ell)}) \phi(h_{\nu i}^{(\ell)}),\] <p>并定义输入层 kernel</p> \[\Phi_{\mu\nu}^{(0)} \equiv \frac{1}{D}x_\mu^\top x_\nu.\] <p>NNGP 的核心结论是：当 $N\to\infty$ 时，$\Phi^{(\ell)}$ self-average 到 deterministic quantity；与此同时，每一个 neuron 的 preactivation vector</p> \[\mathbf h_i^{(\ell)} = \bigl(h_{1i}^{(\ell)},\ldots,h_{Pi}^{(\ell)}\bigr)\] <p>变成一个 $P$-dimensional Gaussian random vector：</p> \[\boxed{ \mathbf h_i^{(\ell)} \sim \mathcal N\!\left(0,\Phi^{(\ell-1)}\right). }\] <p>因此</p> \[\boxed{ \Phi_{\mu\nu}^{(\ell)} = \mathbb E_{\mathbf h\sim\mathcal N(0,\Phi^{(\ell-1)})} \left[ \phi(h_\mu)\phi(h_\nu) \right]. }\] <p>这已经是 NNGP kernel recursion。下面用 DMFT / field-theoretic 方法得到它。</p> <h2 id="3-dmft-derivation-of-the-nngp">3. DMFT derivation of the NNGP</h2> <h3 id="31-generating-function-for-preactivations">3.1 Generating function for preactivations</h3> <p>我们希望得到所有 preactivations 的 joint distribution。引入 source fields $b_{\mu i}^{(\ell)}$，定义 characteristic generating function（其对数 $\log Z$ 生成 cumulants）</p> \[Z[b] = \mathbb E_{W} \exp\left( i\sum_{\ell=1}^{L} \sum_{\mu=1}^{P} \mathbf b_{\mu}^{(\ell)}\cdot \mathbf h_{\mu}^{(\ell)} \right).\] <p>如果能够在 $N\to\infty$ 时求出 $Z[b]$，就等价于确定 preactivation fields 的全部 finite-dimensional distributions。</p> <h3 id="32-enforce-the-network-equations-with-delta-functions">3.2 Enforce the network equations with delta functions</h3> <p>以下对 hidden-to-hidden layers 写成 $1/\sqrt N$；第一层完全相同，只需把 $N$ 换成 $D$，并把 fixed input covariance 记为 $\Phi^{(0)}$.</p> <p>forward equations 是确定性约束。对每一层插入</p> \[1= \int d\mathbf h_{\mu}^{(\ell)} \,\delta\!\left( \mathbf h_{\mu}^{(\ell)} - \frac{1}{\sqrt N} W^{(\ell)} \phi(\mathbf h_{\mu}^{(\ell-1)}) \right),\] <p>并使用 Fourier representation</p> \[\delta(\mathbf y) = \int\frac{d\hat{\mathbf y}}{(2\pi)^N} \exp\!\left(i\hat{\mathbf y}\cdot\mathbf y\right).\] <p>于是每一层会引入 conjugate field $\hat{\mathbf h}_{\mu}^{(\ell)}$。与随机权重有关的部分变成</p> \[\exp\left[ - \frac{i}{\sqrt N} \sum_{\mu,i,j} \hat h_{\mu i}^{(\ell)} W_{ij}^{(\ell)} \phi(h_{\mu j}^{(\ell-1)}) \right].\] <h3 id="33-average-over-the-random-initialization">3.3 Average over the random initialization</h3> <p>由于 $W_{ij}^{(\ell)}$ 是独立 Gaussian disorder，可以逐元素精确积分。利用</p> \[\mathbb E_{W\sim\mathcal N(0,1)}e^{-iWa} =e^{-a^2/2},\] <p>得到</p> \[\mathbb E_{W^{(\ell)}}[\cdots] = \exp\left[ - \frac12 \sum_{\mu,\nu} \hat{\mathbf h}_{\mu}^{(\ell)}\cdot \hat{\mathbf h}_{\nu}^{(\ell)} \Phi_{\mu\nu}^{(\ell-1)} \right].\] <p>这是关键一步。原来 $N^2$ 个 microscopic random weights 的影响，被压缩成了一个 $P\times P$ 的 macroscopic object：</p> \[\Phi_{\mu\nu}^{(\ell-1)} = \frac1N \phi(\mathbf h_{\mu}^{(\ell-1)})\cdot \phi(\mathbf h_{\nu}^{(\ell-1)}).\] <p>换句话说，在 disorder average 之后，网络只通过 layerwise feature kernel 记住上一层。</p> <h3 id="34-promote-the-empirical-kernel-to-an-order-parameter">3.4 Promote the empirical kernel to an order parameter</h3> <p>接下来把 $\Phi^{(\ell)}$ 当作独立的 macroscopic order parameter，再用 delta function 强制其定义：</p> \[1 = \int d\Phi_{\mu\nu}^{(\ell)} \,d\hat\Phi_{\mu\nu}^{(\ell)} \exp\left\{ \frac{i}{2} \hat\Phi_{\mu\nu}^{(\ell)} \left[ N\Phi_{\mu\nu}^{(\ell)} - \sum_{i=1}^{N} \phi(h_{\mu i}^{(\ell)}) \phi(h_{\nu i}^{(\ell)}) \right] \right\}.\] <p>这样做以后，所有 neuron index $i$ 的积分都 factorize。生成泛函具有标准 mean-field 形式 [2]</p> \[Z[b] = \int \mathcal D\Phi\,\mathcal D\hat\Phi\, \exp\left[ N\,S[\Phi,\hat\Phi;b] \right),\] <p>其中 action 可以写成</p> \[S = \frac{i}{2} \sum_{\ell,\mu,\nu} \hat\Phi_{\mu\nu}^{(\ell)} \Phi_{\mu\nu}^{(\ell)} + \frac1N \sum_{\ell,i} \log z_i^{(\ell)}.\] <p>这里 $z_i^{(\ell)}$ 是一个 <strong>single-site partition function</strong>：</p> \[\begin{aligned} z_i^{(\ell)} =&amp; \int \prod_{\mu} \frac{dh_{\mu}d\hat h_{\mu}}{2\pi} \exp\Bigg[ - \frac12 \sum_{\mu,\nu} \hat h_\mu \Phi_{\mu\nu}^{(\ell-1)} \hat h_\nu \\ &amp;\qquad +i\sum_\mu (\hat h_\mu+b_{\mu i}^{(\ell)})h_\mu - \frac{i}{2} \sum_{\mu,\nu} \hat\Phi_{\mu\nu}^{(\ell)} \phi(h_\mu)\phi(h_\nu) \Bigg]. \end{aligned}\] <p>这一步就是 high-dimensional network $\rightarrow$ single-site effective theory 的核心 reduction。</p> <h3 id="35-infinite-width--saddle-point">3.5 Infinite width = saddle point</h3> <p>因为整个 exponent 是 $N S$，所以</p> \[N\to\infty \quad\Longrightarrow\quad Z[b] \asymp \exp\left[ N S[\Phi_\star,\hat\Phi_\star;b] \right),\] <p>其中 $(\Phi_\star,\hat\Phi_\star)$ 满足</p> \[\frac{\partial S}{\partial \Phi_{\mu\nu}^{(\ell)}}=0, \qquad \frac{\partial S}{\partial \hat\Phi_{\mu\nu}^{(\ell)}}=0.\] <p>第二个 saddle equation 直接给出 self-consistency：</p> \[\Phi_{\mu\nu}^{(\ell)} = \frac1N\sum_{i=1}^{N} \left\langle \phi(h_{\mu i}^{(\ell)}) \phi(h_{\nu i}^{(\ell)}) \right\rangle_i.\] <p>而第一个 saddle equation 给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的 moments，在 $N\to\infty$ 时，一个一致的 saddle 是 [2]</p> \[\boxed{\hat\Phi_{\mu\nu}^{(\ell)}=0.}\] <p>直观上，只有 $O(1)$ 个 sites 被 sources 直接扰动，而其余 $N-O(1)$ 个 sites 在 zero source 下相同；这些 bulk sites 决定 saddle，因此 source 不会在 leading order 改变 macroscopic kernel。</p> <h3 id="36-the-effective-single-site-theory-is-gaussian">3.6 The effective single-site theory is Gaussian</h3> <p>在 $\hat\Phi^{(\ell)}=0$ 后，single-site integral 简化为</p> \[\begin{aligned} z^{(\ell)}(b) &amp;= \int \frac{d^P\mathbf h} {(2\pi)^{P/2}\sqrt{\det\Phi^{(\ell-1)}}} \\ &amp;\qquad\times \exp\left[ - \frac12 \mathbf h^\top (\Phi^{(\ell-1)})^{-1} \mathbf h +i\mathbf b^\top\mathbf h \right]. \end{aligned}\] <p>这正是 multivariate Gaussian 的 characteristic function。因此</p> \[\boxed{ \mathbf h_i^{(\ell)} \sim \mathcal N\!\left(0,\Phi^{(\ell-1)}\right), }\] <p>并且不同 neurons $i$ 在 infinite-width saddle 上 iid。代回 self-consistency equation：</p> \[\boxed{ \Phi_{\mu\nu}^{(\ell)} = \mathbb E_{\mathbf h\sim\mathcal N(0,\Phi^{(\ell-1)})} \left[ \phi(h_\mu)\phi(h_\nu) \right], \qquad \Phi_{\mu\nu}^{(0)}=\frac{x_\mu^\top x_\nu}{D}. }\] <p>这就是 NNGP recursion。</p> <h2 id="4-recovering-the-standard-nngp-kernel">4. Recovering the standard NNGP kernel</h2> <p>Lee et al. [3] 更常用的 parameterization 是</p> \[h_i^{(\ell)}(x) = \frac{\sigma_w}{\sqrt{N_{\ell-1}}} \sum_{j=1}^{N_{\ell-1}} W_{ij}^{(\ell)} \phi(h_j^{(\ell-1)}(x)) + \sigma_b b_i^{(\ell)},\] <p>其中 $W_{ij}^{(\ell)},b_i^{(\ell)}\sim\mathcal N(0,1)$。定义 preactivation covariance</p> \[K^{(\ell)}(x,x') = \mathbb E\big[h_i^{(\ell)}(x)h_i^{(\ell)}(x')\big].\] <p>第一层为</p> \[\boxed{ K^{(1)}(x,x') = \sigma_b^2 + \sigma_w^2\frac{x^\top x'}{D}. }\] <p>后续各层满足 deterministic recursion [3]</p> \[\boxed{ K^{(\ell)}(x,x') = \sigma_b^2 + \sigma_w^2 \mathbb E_{(u,v)\sim\mathcal N(0,\Sigma^{(\ell-1)})} [\phi(u)\phi(v)], }\] <p>其中</p> \[\Sigma^{(\ell-1)} = \begin{pmatrix} K^{(\ell-1)}(x,x) &amp; K^{(\ell-1)}(x,x')\\ K^{(\ell-1)}(x',x) &amp; K^{(\ell-1)}(x',x') \end{pmatrix}.\] <p>对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的 joint distribution 都是 multivariate Gaussian。若把最终 scalar affine output 也计作第 $L$ 层，则在 function space 中</p> \[\boxed{f(\cdot)\sim\mathrm{GP}(0,K^{(L)}).}\] <p>若 $L$ 只计 hidden layers，则相同公式对应 output kernel $K^{(L+1)}$.</p> <p>Lee et al. [3] 的 CLT 推导与上面的 DMFT 推导得到完全相同的 recursion：CLT 是逐层证明 Gaussianity；DMFT 则进一步把 Gaussianity、kernel self-averaging 和 single-site reduction 统一到同一个 saddle-point formalism 中。</p> <h2 id="5-initialization-as-a-kernel-design-problem">5. Initialization as a kernel design problem</h2> <p>NNGP 让 initialization 的作用变得非常直接：$\sigma_w,\sigma_b$ 和 nonlinearity $\phi$ 决定了 kernel map</p> \[K^{(\ell-1)} \mapsto K^{(\ell)}.\] <p>因此 initialization 不仅影响 gradient scale，也决定了网络在训练前偏好的 function space。</p> <h3 id="linear-activation">Linear activation</h3> <p>若 $\phi(u)=u$ 且 $\sigma_b=0$，则</p> \[K^{(\ell)}=\sigma_w^2K^{(\ell-1)}.\] <p>要保持 depth 增加时的 variance scale，需要</p> \[\sigma_w^2=1,\] <p>即 equal-width 情形下的 Xavier-like scaling。</p> <h3 id="relu-and-he-initialization">ReLU and He initialization</h3> <p>若 $\phi(u)=\max(0,u)$，记</p> \[q_\ell=K^{(\ell)}(x,x).\] <p>对 $u\sim\mathcal N(0,q_{\ell-1})$，</p> \[\mathbb E[\operatorname{ReLU}(u)^2] = \frac{q_{\ell-1}}{2}.\] <p>因此在 $\sigma_b=0$ 时</p> \[q_\ell = \frac{\sigma_w^2}{2}q_{\ell-1}.\] <p>variance-preserving condition 是</p> \[\boxed{\sigma_w^2=2,}\] <p>也就是</p> \[\operatorname{Var}(W_{ij}^{\mathrm{effective}}) =\frac{2}{N},\] <p>这正是 He initialization 的 mean-field 解释。</p> <p>更进一步，ReLU 的 off-diagonal kernel 也有 closed form。令</p> \[\cos\theta = \frac{K(x,x')} {\sqrt{K(x,x)K(x',x')}},\] <p>则 [3,4]</p> \[\mathbb E[\operatorname{ReLU}(u)\operatorname{ReLU}(v)] = \frac{\sqrt{K(x,x)K(x',x')}}{2\pi} \left[ \sin\theta+(\pi-\theta)\cos\theta \right].\] <p>因此一个随机初始化的 infinitely-wide ReLU network 对应一个完全确定的 compositional arccosine kernel。</p> <h2 id="6-what-nngp-does--and-does-not--say">6. What NNGP does — and does not — say</h2> <p>NNGP 描述的是<strong>随机初始化所诱导的 function prior</strong>，而不是一般 feature-learning training dynamics。</p> <ul> <li> <strong>NNGP:</strong> $f(\cdot)$ 在 initialization 上的分布；核心对象是 covariance kernel $K^{(\ell)}$。</li> <li> <strong>NTK:</strong> parameter Jacobian 的 Gram kernel；在 lazy / kernel regime 中控制 gradient-flow prediction dynamics [5]。</li> <li> <strong>DMFT for feature learning:</strong> kernel 本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。</li> </ul> <p>因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成一个 deterministic kernel recursion；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个 static mean-field theory 扩展为真正的 dynamical mean-field theory。</p> <h2 id="7-takeaway">7. Takeaway</h2> <p>NNGP 最值得记住的不是“宽网络等价于 GP”这一句话，而是背后的结构：</p> \[\boxed{ \text{random initialization} \xrightarrow{N\to\infty} \text{self-averaging kernel} \xrightarrow{\text{saddle point}} \text{Gaussian single-site field} \xrightarrow{\text{self-consistency}} \text{NNGP recursion}. }\] <p>从这个角度看，Xavier/He initialization、NNGP、NTK 以及 feature-learning DMFT 并不是彼此孤立的理论。它们都在回答同一个问题：<strong>当神经网络的 width 很大时，哪些 microscopic details 会消失，哪些 macroscopic order parameters 会保留下来，并控制最终的函数与训练动力学？</strong></p> <h2 id="references">References</h2> <ol> <li> <a id="ref1"></a>Radford M. Neal. <em>Priors for Infinite Networks</em>. In <strong>Bayesian Learning for Neural Networks</strong>, Springer, 1996.</li> <li> <a id="ref2"></a>Cengiz Pehlevan and Blake Bordelon. <em>Lecture Notes on Infinite-Width Limits of Neural Networks</em>. Princeton Machine Learning Summer School, 2023.</li> <li> <a id="ref3"></a>Jaehoon Lee, Yasaman Bahri, Roman Novak, Samuel S. Schoenholz, Jeffrey Pennington, and Jascha Sohl-Dickstein. <em>Deep Neural Networks as Gaussian Processes</em>. ICLR, 2018. arXiv:1711.00165.</li> <li> <a id="ref4"></a>Youngmin Cho and Lawrence K. Saul. <em>Kernel Methods for Deep Learning</em>. NeurIPS, 2009.</li> <li> <a id="ref5"></a>Arthur Jacot, Franck Gabriel, and Clément Hongler. <em>Neural Tangent Kernel: Convergence and Generalization in Neural Networks</em>. NeurIPS, 2018.</li> </ol> </div> </article> <br> <hr> <br> <h2 class="text-3xl font-semibold mb-4 mt-12">Enjoy Reading This Article?</h2> <p class="mb-2">Here are some more articles you might like to read next:</p> <ul class="list-disc pl-7 my-3 space-y-2 marker:text-[var(--global-theme-color)]"> <li class="leading-relaxed"> <a class="underline decoration-1 hover:text-[var(--global-hover-color)]" href="/blog/2026/first-blog/">欢迎来到我的博客！</a> </li> </ul> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Bowen Xu. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: false
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" integrity="sha256-0q+JdOlScWOHcunpUk21uab1jW7C1deBQARHtKMcaB4=" crossorigin="anonymous"></script> <script defer src="/assets/al_charts/js/chartjs-setup.js" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "About",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-blog",
+          title: "Blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "nav-publications",
+          title: "Publications",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "post-neural-network-initializations-and-nngp",
+        
+          title: "Neural Network Initializations and NNGP",
+        
+        description: "从初始化尺度到无限宽高斯过程：用 mean-field / DMFT 技术推导 NNGP",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/neural-network-initializations-and-nngp-2/";
+          
+        },
+      },{id: "post-欢迎来到我的博客",
+        
+          title: "欢迎来到我的博客！",
+        
+        description: "我的第一篇博客",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/first-blog/";
+          
+        },
+      },{id: "news-我的个人主页已经上线-欢迎关注-专注于分享深度学习理论与大模型预训练优化器动力学的研究思考",
+          title: '我的个人主页已经上线，欢迎关注！专注于分享深度学习理论与大模型预训练优化器动力学的研究思考。',
+          description: "",
+          section: "News",},{
+        id: 'social-cv',
+        title: 'CV',
+        section: 'Socials',
+        handler: () => {
+          window.open("/assets/pdf/example_pdf.pdf", "_blank");
+        },
+      },{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%62%77%78%75%32%30%30%35@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/bwxu05", "_blank");
+        },
+      },{
+        id: 'social-rss',
+        title: 'RSS Feed',
+        section: 'Socials',
+        handler: () => {
+          window.open("/feed.xml", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
