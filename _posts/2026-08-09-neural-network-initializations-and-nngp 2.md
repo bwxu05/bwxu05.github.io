@@ -27,7 +27,7 @@ N\,S
 \text{effective single-site process}.
 $$
 
-## 1. Initialization scaling: why $1/\sqrt{N}$?
+## 1. Initialization scaling: why ${N}^{-1/2}$?
 
 考虑一个全连接神经网络。对隐藏层取宽度 $N$，输入维度为 $D$。先忽略 bias：
 
@@ -51,7 +51,7 @@ $$
 W_{ij}^{(\ell)}\overset{\mathrm{i.i.d.}}{\sim}\mathcal N(0,1).
 $$
 
-为什么必须有 $1/\sqrt N$？更一般地，若写成
+为什么必须有 $N^{-1/2}$？更一般地，若写成
 
 $$
 h_i^{(\ell)}
@@ -89,9 +89,9 @@ $$
 W_{ij}\sim\mathcal N\!\left(0,\frac{1}{N}\right)
 $$
 
-而不额外写 $1/\sqrt N$。这就是 Xavier/He 等初始化中 fan-in scaling “平均场”本质：**每个神经元接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
+而不额外写 $N^{-1/2}$。这就是 Xavier/He 等初始化中 fan-in scaling “平均场”本质：**每个神经元接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
 
-## 2. The object that survives at infinite width
+## 2. Infinite-width limit of neural networks
 
 对一组有限输入 $\{x_\mu\}_{\mu=1}^{P}$，定义 layer-$\ell$ 的 empirical feature kernel
 
@@ -111,7 +111,7 @@ $$
 \frac{1}{D}x_\mu^\top x_\nu.
 $$
 
-NNGP 的核心结论是：当 $N\to\infty$ 时，$\Phi^{(\ell)}$ self-average 到确定量；与此同时，每一个神经元的 preactivation vector
+NNGP 的核心结论是：当 $N\to\infty$ 时，$\Phi^{(\ell)}$ self-average 到确定量；与此同时，每一个神经元的 preactivation 向量
 
 $$
 \mathbf h_i^{(\ell)}
@@ -144,9 +144,9 @@ $$
 
 这已经是 NNGP 核。下面用 DMFT 方法作推导。
 
-## 3. DMFT derivation of the NNGP
+## 3. DMFT derivation of NNGP
 
-### 3.1 Generating function for preactivations
+### 3.1 Moment generating function for preactivations
 
 我们希望得到所有 preactivations 的联合分布。引入 source fields $b_{\mu i}^{(\ell)}$，定义矩母函数
 
@@ -164,11 +164,11 @@ $$
 
 如果能够在 $N\to\infty$ 时求出 $Z[b]$，就等价于确定 preactivation fields 的全部有限维分布。
 
-### 3.2 Enforce the network equations with delta functions
+### 3.2 Enforce with delta functions
 
 以下对 hidden-to-hidden layers 写成 $1/\sqrt N$；第一层完全相同，只需把 $N$ 换成 $D$，并把固定的输入协方差核记为 $\Phi^{(0)}$.
 
-forward equations 是确定性约束。对每一层插入
+forward equations 是确定性约束。对每一层引入
 
 $$
 1=
@@ -228,7 +228,7 @@ $$
 \right].
 $$
 
-这是关键一步。原来 $N^2$ 个微关无序变量的影响，被压缩成了一个 $P\times P$ 的宏观对象：
+这是关键一步。原来 $N^2$ 个随机变量的影响，统计平均下为一个 $P\times P$ 的宏观对象：
 
 $$
 \Phi_{\mu\nu}^{(\ell-1)}
@@ -240,9 +240,9 @@ $$
 
 换句话说，在对无序取平均后之后，网络只通过逐层特征核记忆上一层。
 
-### 3.4 Promote the empirical kernel to an order parameter
+### 3.4 Introducing order parameters
 
-接下来把 $\Phi^{(\ell)}$ 当作独立的序参量，再用 delta function 强制其定义：
+接下来把 $\Phi^{(\ell)}$ 当作独立的序参量，再用 delta function 定义：
 
 $$
 1
@@ -262,7 +262,7 @@ N\Phi_{\mu\nu}^{(\ell)}
 \right\}.
 $$
 
-这样做以后，所有 neuron index $i$ 的积分都 factorize。生成泛函具有标准“平均场”形式 [2]
+矩母函数具有标准的“平均场”形式 [2]
 
 $$
 Z[b]
@@ -273,7 +273,7 @@ N\,S[\Phi,\hat\Phi;b]
 \right),
 $$
 
-其中 action 可以写成
+其中作用量可以写成
 
 $$
 S
@@ -288,7 +288,7 @@ S
 \log z_i^{(\ell)}.
 $$
 
-这里 $z_i^{(\ell)}$ 是一个 **single-site partition function**：
+这里 $z_i^{(\ell)}$ 是 single-site partition function：
 
 $$
 \begin{aligned}
@@ -319,7 +319,7 @@ $$
 
 这一步就是 high-dimensional network $\rightarrow$ single-site effective theory 的核心 reduction。
 
-### 3.5 Infinite width limit
+### 3.5 Infinite-width limit and saddle point approximation
 
 因为整个指数是 $N S$，所以
 
@@ -410,7 +410,7 @@ $$
 }
 $$
 
-这就是 NNGP 的迭代。
+这就是 NNGP 的形式。
 
 ## 4. Recovering the standard NNGP kernel
 
@@ -472,7 +472,7 @@ K^{(\ell-1)}(x',x) & K^{(\ell-1)}(x',x')
 \end{pmatrix}.
 $$
 
-对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的联合分布都是多元高斯分布。若把最终 scalar affine output 也计作第 $L$ 层，则在函数空间中
+对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的联合分布都是多元高斯分布。若把最终输出层也计作第 $L$ 层，则在函数空间中
 
 $$
 \boxed{f(\cdot)\sim\mathrm{GP}(0,K^{(L)}).}
