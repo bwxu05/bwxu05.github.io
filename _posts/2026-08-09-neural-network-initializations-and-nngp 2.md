@@ -11,7 +11,7 @@ chart:
 
 对于大语言模型的预训练，神经网络的初始化不只是一个数值稳定性问题，更深刻影响神经网络的 feature learning 能力。对于随机初始化的宽神经网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在一定条件下收敛到高斯过程 (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
 
-Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序动力系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon lecture notes [2] Appendix A 的思路一致。
+Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序动力系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon 的 Lecture notes [2] Appendix A 的思路一致。
 
 严格地说，NNGP 只涉及初始化，因此这里没有真实的时间变量；它可以看作 DMFT 在 $t=0$ 的 **static mean-field sector**。但它已经包含了 DMFT 最核心的结构：
 
@@ -45,7 +45,7 @@ W_{ij}^{(\ell)}\phi\!\left(h_{\mu j}^{(\ell-1)}\right),
 \qquad \ell\ge 2,
 $$
 
-其中 $\mu,\nu$ index inputs，$i,j$ index neurons，并假设
+其中 $\mu,\nu$ 为输入下表，$i,j$ 为神经元下标，并假设
 
 $$
 W_{ij}^{(\ell)}\overset{\mathrm{i.i.d.}}{\sim}\mathcal N(0,1).
@@ -89,7 +89,7 @@ $$
 W_{ij}\sim\mathcal N\!\left(0,\frac{1}{N}\right)
 $$
 
-而不额外写 $1/\sqrt N$。这就是 Xavier/He 等 initialization 中 fan-in scaling 的 mean-field 本质：**每个神经元接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
+而不额外写 $1/\sqrt N$。这就是 Xavier/He 等初始化中 fan-in scaling “平均场”本质：**每个神经元接收 $N$ 个随机贡献，因此每一项必须缩放到 $N^{-1/2}$ 量级，才能使总方差保持 $O(1)$。**
 
 ## 2. The object that survives at infinite width
 
@@ -206,7 +206,7 @@ $$
 
 ### 3.3 Average over the random initialization
 
-由于 $W_{ij}^{(\ell)}$ 是独立 Gaussian disorder，可以逐元素精确积分。利用
+由于 $W_{ij}^{(\ell)}$ 是 iid 高斯随机变量，可以逐元素精确积分。利用
 
 $$
 \mathbb E_{W\sim\mathcal N(0,1)}e^{-iWa}
@@ -353,7 +353,7 @@ $$
 \right\rangle_i.
 $$
 
-而第一个鞍点方程给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的 moments，在 $N\to\infty$ 时，一个一致的 saddle 是 [2]
+而第一个鞍点方程给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的矩，在 $N\to\infty$ 时，一个一致的鞍点是 [2]
 
 $$
 \boxed{\hat\Phi_{\mu\nu}^{(\ell)}=0.}
@@ -571,7 +571,7 @@ $$
 
 因此一个随机初始化的无穷宽 ReLU network 对应一个完全确定的 compositional arccosine kernel。
 
-## 6. What NNGP does — and does not — say
+## 6. What does NNGP mean? 
 
 NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般 feature-learning training dynamics。
 
@@ -579,7 +579,7 @@ NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般 f
 - **NTK:** parameter Jacobian 的 Gram kernel；在 lazy / kernel regime 中控制 gradient-flow prediction dynamics [5]。
 - **DMFT for feature learning:** kernel 本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。
 
-因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成一个 deterministic kernel recursion；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
+因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成确定性核迭代；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
 
 ## References
 
