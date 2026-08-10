@@ -11,21 +11,9 @@ chart:
 
 对于大语言模型的预训练，神经网络的初始化不只是一个数值稳定性问题，更深刻影响神经网络的 feature learning 能力。对于随机初始化的宽神经网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在一定条件下收敛到高斯过程 (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
 
-Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序动力系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon 的 Lecture notes [2] Appendix A 的思路一致。
+Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon 的 Lecture notes [2] Appendix A 的思路一致。
 
-严格地说，NNGP 只涉及初始化，因此这里没有真实的时间变量；它可以看作 DMFT 在 $t=0$ 的 **static mean-field sector**。但它已经包含了 DMFT 最核心的结构：
-
-$$
-\text{disorder average}
-\;\longrightarrow\;
-\text{order parameters}
-\;\longrightarrow\;
-N\,S
-\;\longrightarrow\;
-\text{saddle point}
-\;\longrightarrow\;
-\text{effective single-site process}.
-$$
+严格地说，NNGP 只涉及初始化，因此这里没有真实的时间变量；它可以看作 DMFT 在 $t=0$ 的“静态平均场”结果。
 
 ## 1. Initialization scaling: why ${N}^{-1/2}$?
 
@@ -119,7 +107,7 @@ $$
 \bigl(h_{1i}^{(\ell)},\ldots,h_{Pi}^{(\ell)}\bigr)
 $$
 
-变成一个 $P$-dimensional Gaussian random vector：
+变成一个 $P$ 维高斯随机向量：
 
 $$
 \boxed{
@@ -168,7 +156,7 @@ $$
 
 以下对 hidden-to-hidden layers 写成 $1/\sqrt N$；第一层完全相同，只需把 $N$ 换成 $D$，并把固定的输入协方差核记为 $\Phi^{(0)}$.
 
-forward equations 是确定性约束。对每一层引入
+前传方程是确定性约束。对每一层引入
 
 $$
 1=
@@ -182,7 +170,7 @@ W^{(\ell)}
 \right),
 $$
 
-并使用 Fourier representation
+并使用 Fourier 表示
 
 $$
 \delta(\mathbf y)
@@ -242,7 +230,7 @@ $$
 
 ### 3.4 Introducing order parameters
 
-接下来把 $\Phi^{(\ell)}$ 当作独立的序参量，再用 delta function 定义：
+接下来把 $\Phi^{(\ell)}$ 当作独立的序参量，再用 delta 函数定义：
 
 $$
 1
@@ -288,7 +276,7 @@ S
 \log z_i^{(\ell)}.
 $$
 
-这里 $z_i^{(\ell)}$ 是 single-site partition function：
+这里 $z_i^{(\ell)}$ 是 single-site (单点) 配分函数：
 
 $$
 \begin{aligned}
@@ -317,7 +305,7 @@ z_i^{(\ell)}
 \end{aligned}
 $$
 
-这一步就是 high-dimensional network $\rightarrow$ single-site effective theory 的核心 reduction。
+这一步就是宽神经网络到单点有效理论的核心解耦。
 
 ### 3.5 Infinite-width limit and saddle point approximation
 
@@ -361,9 +349,9 @@ $$
 
 直观上，只有 $O(1)$ 个 sites 被 sources 直接扰动，而其余 $N-O(1)$ 个 sites 在 zero source 下相同；这些 bulk sites 决定鞍点，因此 source 不会在 leading order 改变宏观核。
 
-### 3.6 The effective single-site theory is Gaussian
+### 3.6 Gaussian Process as single-site effective theory
 
-在 $\hat\Phi^{(\ell)}=0$ 后，single-site integral 简化为
+在 $\hat\Phi^{(\ell)}=0$ 后，单点积分简化为
 
 $$
 \begin{aligned}
@@ -579,7 +567,7 @@ NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般 f
 - **NTK:** 参数雅可比矩阵的 Gram 核；在 lazy / kernel regime 中控制 gradient flow prediction dynamics [5]。
 - **DMFT for feature learning:** 核本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。
 
-因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成确定性核迭代；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
+因此，NNGP 可以看成完整训练动力学 DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成确定性核迭代；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
 
 ## References
 
