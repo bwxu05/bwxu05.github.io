@@ -2,9 +2,9 @@
 layout: post
 title: Neural Network Initializations and NNGP
 date: 2026-08-09
-description: 无限宽神经网络的随机初始化：NNGP 的 DMFT 推导
+description: 无穷宽神经网络的随机初始化：NNGP 的 DMFT 推导
 tags: pre-training scaling muP optimizer
-categories: muP-Theory
+categories: muP-Theory DMFT
 chart:
   chartjs: true
 ---
@@ -61,7 +61,7 @@ $$
 因此有限、非退化的 preactivations 要求 [2]
 
 $$
-\boxed{2a_\ell+b_\ell=1.}
+2a_\ell+b_\ell=1.
 $$
 
 常见的两种写法其实等价：
@@ -110,24 +110,20 @@ $$
 变成一个 $P$ 维高斯随机向量：
 
 $$
-\boxed{
 \mathbf h_i^{(\ell)}
 \sim
 \mathcal N\!\left(0,\Phi^{(\ell-1)}\right).
-}
 $$
 
 因此
 
 $$
-\boxed{
 \Phi_{\mu\nu}^{(\ell)}
 =
 \mathbb E_{\mathbf h\sim\mathcal N(0,\Phi^{(\ell-1)})}
 \left[
 \phi(h_\mu)\phi(h_\nu)
 \right].
-}
 $$
 
 这已经是 NNGP 核。下面用 DMFT 方法作推导。
@@ -344,7 +340,7 @@ $$
 而第一个鞍点方程给出 conjugate kernel $\hat\Phi^{(\ell)}$。对只包含有限个 source insertions 的矩，在 $N\to\infty$ 时，一个一致的鞍点是 [2]
 
 $$
-\boxed{\hat\Phi_{\mu\nu}^{(\ell)}=0.}
+\hat\Phi_{\mu\nu}^{(\ell)}=0.
 $$
 
 直观上，只有 $O(1)$ 个 sites 被 sources 直接扰动，而其余 $N-O(1)$ 个 sites 在 zero source 下相同；这些 bulk sites 决定鞍点，因此 source 不会在 leading order 改变宏观核。
@@ -376,17 +372,14 @@ $$
 这正是多元高斯分布的矩母函数。因此
 
 $$
-\boxed{
 \mathbf h_i^{(\ell)}
 \sim
 \mathcal N\!\left(0,\Phi^{(\ell-1)}\right),
-}
 $$
 
 并且不同神经元 $i$ 在无穷宽极限的鞍点上 iid。代回 self-consistency equation：
 
 $$
-\boxed{
 \Phi_{\mu\nu}^{(\ell)}
 =
 \mathbb E_{\mathbf h\sim\mathcal N(0,\Phi^{(\ell-1)})}
@@ -395,7 +388,6 @@ $$
 \right],
 \qquad
 \Phi_{\mu\nu}^{(0)}=\frac{x_\mu^\top x_\nu}{D}.
-}
 $$
 
 这就是 NNGP 的形式。
@@ -426,19 +418,16 @@ $$
 第一层为
 
 $$
-\boxed{
 K^{(1)}(x,x')
 =
 \sigma_b^2
 +
 \sigma_w^2\frac{x^\top x'}{D}.
-}
 $$
 
 后续各层满足确定性迭代 [3]
 
 $$
-\boxed{
 K^{(\ell)}(x,x')
 =
 \sigma_b^2
@@ -446,7 +435,6 @@ K^{(\ell)}(x,x')
 \sigma_w^2
 \mathbb E_{(u,v)\sim\mathcal N(0,\Sigma^{(\ell-1)})}
 [\phi(u)\phi(v)],
-}
 $$
 
 其中
@@ -463,7 +451,7 @@ $$
 对于任意有限输入集合 $x^1,\ldots,x^P$，网络输出的联合分布都是多元高斯分布。若把最终输出层也计作第 $L$ 层，则在函数空间中
 
 $$
-\boxed{f(\cdot)\sim\mathrm{GP}(0,K^{(L)}).}
+f(\cdot)\sim\mathrm{GP}(0,K^{(L)}).
 $$
 
 若 $L$ 只计隐藏层，则相同公式对应输出核 $K^{(L+1)}$.
@@ -525,7 +513,7 @@ $$
 variance-preserving condition 是
 
 $$
-\boxed{\sigma_w^2=2,}
+\sigma_w^2=2,
 $$
 
 也就是
