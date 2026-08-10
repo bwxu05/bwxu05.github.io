@@ -28,7 +28,7 @@ latest_posts:
 
 ---
 
-I am an undergraduate student at [School of Statistics](https://stat.ruc.edu.cn), [Renmin University of China](https://ruc.edu.cn), where I am in the Honors Class for Statistics (Statistics and Data Science). Now I am a research intern at [Gaoling School of Artificial Intelligence](https://ai.ruc.edu.cn), Renmin University of China. I am very fortunate to be advised by [Prof. Chongxuan Li](https://zhenxuan00.github.io/).
+I am an undergraduate student at [School of Statistics](https://stat.ruc.edu.cn), [Renmin University of China](https://www.ruc.edu.cn), where I am in the Honors Class for Statistics (Statistics and Data Science). Now I am a research intern at [Gaoling School of Artificial Intelligence](https://ai.ruc.edu.cn), Renmin University of China. I am very fortunate to be advised by [Prof. Chongxuan Li](https://zhenxuan00.github.io/).
 
 My research interests are machine learning and deep learning theory. I am particularly interested in the training dynamics of neural networks and optimizers. Recently, I focus on scaling of optimizers in deep learning.
 
