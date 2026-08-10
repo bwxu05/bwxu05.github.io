@@ -6,7 +6,7 @@ subtitle: Undergraduate Student at <a href='https://www.ruc.edu.cn'>Renmin Unive
 
 profile:
   align: right
-  image: myphoto.jpg
+  image: my_photo.png
   image_circular: false # crops the image to make it circular
   more_info: >
     <p>Renmin University of China, </p>
