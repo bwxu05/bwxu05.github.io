@@ -9,7 +9,7 @@ chart:
   chartjs: true
 ---
 
-对于大语言模型的预训练，神经网络的初始化不只是一个数值稳定性问题，更深刻影响神经网络的 feature learning 能力。对于随机初始化的宽神经网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在一定条件下收敛到高斯过程 (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
+对于大语言模型的预训练，神经网络的初始化不仅影响训练的稳定性，更深刻影响神经网络的 feature learning 能力。对于随机初始化的宽神经网络，参数分布会诱导一个**随机函数分布**；当宽度趋于无穷时，这个函数分布在一定条件下收敛到高斯过程 (GP)。对应的核通常称为 **Neural Network Gaussian Process (NNGP) kernel** [1–3]。
 
 Lee et al. [3] 给出了经典的逐层中心极限定理 (CLT) 推导。这里采用更加“物理”的视角，即“平均场”的视角：把随机初始化的权重视为 quenched disorder，利用统计物理中处理高维无序系统的 Dynamical Mean Field Theory (DMFT)，再在 $N\to\infty$ 时通过鞍点近似得到有效动力学。这个推导与 Pehlevan--Bordelon 的 Lecture notes [2] Appendix A 的思路一致。
 
