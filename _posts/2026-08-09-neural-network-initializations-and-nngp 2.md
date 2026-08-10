@@ -2,7 +2,7 @@
 layout: post
 title: Neural Network Initializations and NNGP
 date: 2026-08-09
-description: 从随机初始化到无限宽神经网络：NNGP 的 DMFT 推导
+description: 无限宽神经网络的随机初始化：NNGP 的 DMFT 推导
 tags: pre-training scaling muP optimizer
 categories: muP-Theory
 chart:
@@ -480,7 +480,7 @@ $$
 
 若 $L$ 只计隐藏层，则相同公式对应输出核 $K^{(L+1)}$.
 
-Lee et al. [3] 的 CLT 推导与上面的 DMFT 推导得到完全相同的迭代：CLT 是逐层证明高斯性；DMFT 则进一步把 Gaussianity、kernel self-averaging 和 single-site reduction 统一到同一个 saddle-point formalism 中。
+Lee et al. [3] 的 CLT 推导与上面的 DMFT 推导得到完全相同的迭代：CLT 是逐层证明高斯性；DMFT 则进一步把高斯性、自平均性在同一个鞍点近似的框架中分析。
 
 ## 5. Initialization as a kernel design problem
 
@@ -508,7 +508,7 @@ $$
 \sigma_w^2=1,
 $$
 
-即等宽情形下的 Xavier-like scaling。
+即等宽情形下的 Xavier-like initialization。
 
 ### ReLU and He initialization
 
@@ -575,9 +575,9 @@ $$
 
 NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般 feature-learning training dynamics。
 
-- **NNGP:** $f(\cdot)$ 在 initialization 上的分布；核心对象是 covariance kernel $K^{(\ell)}$。
-- **NTK:** parameter Jacobian 的 Gram kernel；在 lazy / kernel regime 中控制 gradient-flow prediction dynamics [5]。
-- **DMFT for feature learning:** kernel 本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。
+- **NNGP:** $f(\cdot)$ 在初始化上的分布；核心对象是协方差核 $K^{(\ell)}$。
+- **NTK:** 参数雅可比矩阵的 Gram 核；在 lazy / kernel regime 中控制 gradient flow prediction dynamics [5]。
+- **DMFT for feature learning:** 核本身随训练演化，需要 time-dependent order parameters，例如 $\Phi_{\mu\nu}^{(\ell)}(t,s)$、gradient kernels 和 response functions [2]。
 
 因此，NNGP 可以看成 full training DMFT 的最简单边界条件：在 $t=0$，随机高维网络已经被压缩成确定性核迭代；训练之后，如果 features 发生 $O(1)$ 演化，就必须把这个“静态”的平均场理论扩展为真正的 DMFT。
 
