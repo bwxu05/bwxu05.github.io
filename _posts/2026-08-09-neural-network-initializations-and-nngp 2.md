@@ -4,7 +4,7 @@ title: Neural Network Initializations and NNGP
 date: 2026-08-09
 description: 无穷宽神经网络的随机初始化：NNGP 的 DMFT 推导
 tags: pre-training scaling muP DMFT
-categories: muP-Theory DMFT-Tutorial
+categories: muP-Theory
 chart:
   chartjs: true
 ---
@@ -81,7 +81,7 @@ $$
 
 ## 2. Infinite-width limit of neural networks
 
-对一组有限输入 $\{x_\mu\}_{\mu=1}^{P}$，定义 layer-$\ell$ 的 empirical feature kernel
+对一组有限输入 $\lbrace x_\mu\rbrace_{\mu=1}^{P}$，定义 layer-$\ell$ 的 empirical feature kernel
 
 $$
 \Phi_{\mu\nu}^{(\ell)}
