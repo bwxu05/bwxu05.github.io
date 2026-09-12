@@ -449,11 +449,11 @@ $\gamma_N=1$ 对应本文的 NTK scaling；$\gamma_N=\gamma_0\sqrt N$、固定 $
 
 ## References
 
-1. <a id="ref1"></a>Arthur Jacot, Franck Gabriel, and Clément Hongler. *Neural Tangent Kernel: Convergence and Generalization in Neural Networks*. NeurIPS, 2018. [arXiv:1806.07572](https://arxiv.org/abs/1806.07572).
-2. <a id="ref2"></a>Cengiz Pehlevan and Blake Bordelon. *Lecture Notes on Infinite-Width Limits of Neural Networks*. Princeton Machine Learning Theory Summer School, June 2023. [Lecture notes](https://pehlevan.seas.harvard.edu/file_url/276).
-3. <a id="ref3"></a>Blake Bordelon and Cengiz Pehlevan. *Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks*. NeurIPS, 2022. [arXiv:2205.09653](https://arxiv.org/abs/2205.09653).
-4. <a id="ref4"></a>Greg Yang. *Tensor Programs II: Neural Tangent Kernel for Any Architecture*. 2020. [arXiv:2006.14548](https://arxiv.org/abs/2006.14548).
-5. <a id="ref5"></a>Jaehoon Lee, Lechao Xiao, Samuel S. Schoenholz, Yasaman Bahri, Roman Novak, Jascha Sohl-Dickstein, and Jeffrey Pennington. *Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient Descent*. NeurIPS, 2019. [arXiv:1902.06720](https://arxiv.org/abs/1902.06720).
-6. <a id="ref6"></a>Lénaïc Chizat, Edouard Oyallon, and Francis Bach. *On Lazy Training in Differentiable Programming*. NeurIPS, 2019. [arXiv:1812.07956](https://arxiv.org/abs/1812.07956).
-7. <a id="ref7"></a>Greg Yang and Edward J. Hu. *Feature Learning in Infinite-Width Neural Networks*. ICML, 2021. [arXiv:2011.14522](https://arxiv.org/abs/2011.14522).
-8. <a id="ref8"></a>Greg Yang and Etai Littwin. *Architectural Universality of Neural Tangent Kernel Training Dynamics*. ICML, 2021. [arXiv:2105.03703](https://arxiv.org/abs/2105.03703).
+1. <a id="ref1"></a>Arthur Jacot, Franck Gabriel, and Clément Hongler. *Neural Tangent Kernel: Convergence and Generalization in Neural Networks*. NeurIPS, 2018. 
+2. <a id="ref2"></a>Cengiz Pehlevan and Blake Bordelon. *Lecture Notes on Infinite-Width Limits of Neural Networks*. Princeton Machine Learning Theory Summer School, June 2023. 
+3. <a id="ref3"></a>Blake Bordelon and Cengiz Pehlevan. *Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks*. NeurIPS, 2022.
+4. <a id="ref4"></a>Greg Yang. *Tensor Programs II: Neural Tangent Kernel for Any Architecture*. 2020.
+5. <a id="ref5"></a>Jaehoon Lee, Lechao Xiao, Samuel S. Schoenholz, Yasaman Bahri, Roman Novak, Jascha Sohl-Dickstein, and Jeffrey Pennington. *Wide Neural Networks of Any Depth Evolve as Linear Models Under Gradient Descent*. NeurIPS, 2019.
+6. <a id="ref6"></a>Lénaïc Chizat, Edouard Oyallon, and Francis Bach. *On Lazy Training in Differentiable Programming*. NeurIPS, 2019. 
+7. <a id="ref7"></a>Greg Yang and Edward J. Hu. *Feature Learning in Infinite-Width Neural Networks*. ICML, 2021.
+8. <a id="ref8"></a>Greg Yang and Etai Littwin. *Architectural Universality of Neural Tangent Kernel Training Dynamics*. ICML, 2021.
