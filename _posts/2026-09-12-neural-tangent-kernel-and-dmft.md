@@ -7,9 +7,9 @@ tags: pre-training scaling muP DMFT NTK
 categories: muP-Theory
 ---
 
-上一篇 *Neural Network Initializations and NNGP* 用单点高斯场与 feature kernels 描述了宽网络的随机初始化。这篇继续讨论：**所有层参与训练后，网络的预测如何演化？**
+上一篇 *Neural Network Initializations and NNGP* 用单点高斯过程与特征核描述了宽网络的随机初始化。这篇继续讨论：**所有层参与训练后，网络的预测如何演化？**
 
-在 NTK parameterization 下，无穷宽网络的训练动力学由一个固定的 Neural Tangent Kernel (NTK) 控制 [1,5]。本文从有限宽恒等式出发，通过无序平均、单点生成泛函与鞍点方程计算这个核，再解释它为什么在训练中冻结。这里需要区分两个结论：**自平均使核成为确定量；lazy scaling 与训练稳定性使核保持不变。**
+在 NTK parameterization 下，无穷宽网络的训练动力学由一个固定的 Neural Tangent Kernel (NTK) 控制 [1,5]。本文从有限宽神经网络出发，通过 DMFT 计算这个核的演化动力学，解释它为什么在训练中冻结。
 
 ## 1. Network and training
 
