@@ -231,8 +231,8 @@ $$
 $$
 1
 =
-\int d\Phi_{\mu\nu}^{(\ell)}
-\,d\hat\Phi_{\mu\nu}^{(\ell)}
+\int \frac{d\Phi_{\mu\nu}^{(\ell)}
+\,d\hat\Phi_{\mu\nu}^{(\ell)}}{2\pi}
 \exp\left\{
 \frac{i}{2}
 \hat\Phi_{\mu\nu}^{(\ell)}
@@ -250,7 +250,7 @@ $$
 
 $$
 Z[b]
-=
+\propto
 \int \mathcal D\Phi\,\mathcal D\hat\Phi\,
 \exp\left[
 N\,S[\Phi,\hat\Phi;b]
