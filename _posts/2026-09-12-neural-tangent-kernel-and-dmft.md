@@ -4,7 +4,7 @@ title: Neural Tangent Kernel and Lazy Training
 date: 2026-09-12
 description: 无穷宽神经网络的训练动力学：NTK 的 DMFT 推导
 tags: pre-training scaling muP DMFT NTK
-categories: muP-Theory
+categories: muP-Theory DMFT-Tutorial
 ---
 
 上一篇 *Neural Network Initializations and NNGP* 用单点高斯过程与特征核描述了宽网络的随机初始化。这篇继续讨论：**所有层参与训练后，网络的预测如何演化？**
