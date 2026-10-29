@@ -31,6 +31,7 @@ Lee et al. [<a href="#ref3">3</a>] 用逐层中心极限定理 (CLT) 给出了�
 ## 1. 初始化标度：为什么是 1/√N？
 
 ### 1.1 网络与记号
+{:data-toc-skip=''}
 
 考虑一个全连接网络，输入维度为 $D$，所有隐藏层宽度均为 $N$。暂时忽略 bias（第 4 节再加上）：
 
@@ -74,6 +75,7 @@ W_{ij}^{(\ell)}\phi\!\left(h_{\mu j}^{(\ell-1)}\right).
 $$
 
 ### 1.2 标度分析
+{:data-toc-skip=''}
 
 为什么必须是 $N^{-1/2}$？考虑更一般的写法
 
@@ -149,6 +151,7 @@ $$
 ## 2. 无穷宽极限：先看结论
 
 ### 2.1 特征核
+{:data-toc-skip=''}
 
 对一组有限输入 $\lbrace x_\mu\rbrace_{\mu=1}^{P}$，定义第 $\ell$ 层的经验特征核 (empirical feature kernel)
 
@@ -177,6 +180,7 @@ $$
 $$
 
 ### 2.2 主要结论
+{:data-toc-skip=''}
 
 > **命题（NNGP 极限）.** 固定输入个数 $P$ 与深度 $L$，并假设 $\phi$ 在高斯测度下有有限的二阶矩（例如 $\phi$ 至多多项式增长）。令 $N\to\infty$，则对每一层 $\ell$：
 >
@@ -198,6 +202,7 @@ $$
 这已经是 NNGP 核的递推形式。
 
 ### 2.3 启发式理由：条件高斯 + 大数定律
+{:data-toc-skip=''}
 
 在进入 DMFT 之前，先看一个几乎能直接给出结论的观察。以第 $\ell-1$ 层为条件，
 
@@ -243,6 +248,7 @@ $$
 ## 3. NNGP 的 DMFT 推导
 
 ### 3.1 生成泛函
+{:data-toc-skip=''}
 
 我们希望得到所有 preactivation 的联合分布。对每个 $(\ell,\mu,i)$ 引入 source 场 $\xi_{\mu i}^{(\ell)}$，定义生成泛函（即特征函数）
 
@@ -270,6 +276,7 @@ $$
 特征函数唯一确定分布，所以只要在 $N\to\infty$ 时求出 $Z[\xi]$，就确定了 preactivation 的全部有限维分布。注意任意有限阶矩只涉及有限个非零的 $\xi_{\mu i}^{(\ell)}$——这一点在第 3.6 节很关键。
 
 ### 3.2 用 δ 函数施加前向约束
+{:data-toc-skip=''}
 
 前向传播是确定性约束：$h^{(\ell)}$ 是 $W^{(\ell)}$ 与 $h^{(\ell-1)}$ 的函数。困难在于 $h$ 通过一长串非线性复合依赖于 $W$，无法直接对 $W$ 求平均。标准做法是把 $h$ 提升为独立的积分变量，用 δ 函数施加约束。对每个 $(\ell,\mu,i)$ 插入
 
@@ -322,6 +329,7 @@ $$
 这一改写的价值在于：$h$ 现在是**积分变量**，不再是 $W$ 的函数；而 $W$ **只线性地**出现在指数中。因此可以交换次序，先对 $W$ 求平均。
 
 ### 3.3 对随机初始化求平均
+{:data-toc-skip=''}
 
 固定 $\ell$，记
 
@@ -373,6 +381,7 @@ $$
 这是整个推导中最关键的一步。原来 $N^2$ 个随机权重的全部影响，在统计平均之后被压缩成一个 $P\times P$ 的宏观对象 $\Phi^{(\ell-1)}$。换句话说，**对无序取平均之后，第 $\ell$ 层的每个神经元只通过特征核“看到”上一层**，而不再关心上一层任何单个神经元的取值——这正是“平均场”一词的含义。
 
 ### 3.4 引入序参量：神经元之间的解耦
+{:data-toc-skip=''}
 
 上式仍未在神经元之间解耦：$\Phi^{(\ell-1)}$ 是第 $\ell-1$ 层**所有**神经元的平均，把它们耦合在一起。处理办法是把 $\Phi^{(\ell)}$ 提升为独立的积分变量（**序参量**），再用 δ 函数施加它的定义。对 $\ell=1,\ldots,L-1$ 和每个 $(\mu,\nu)$，利用
 
@@ -482,6 +491,7 @@ $$
 - 原问题有 $O(LN^2)$ 个随机权重和 $O(LNP)$ 个微观变量；现在只剩 $O(LP^2)$ 个宏观序参量需要积分。**这一步就是从 $N$ 体问题到单体有效理论的核心解耦。**
 
 ### 3.5 鞍点方程
+{:data-toc-skip=''}
 
 由于整个指数正比于 $N$，
 
@@ -540,6 +550,7 @@ $$
 第一个方程是**前向的自洽条件**：宏观特征核等于单点有效理论中的平均，这就是大数定律的场论表述。第二个方程是**反向的**：共轭核 $\hat\Phi^{(\ell)}$ 由下一层 response field 的关联决定。在训练动力学的 DMFT 中，梯度与响应信息正是沿这条通道反向传播的；而在初始化时，我们将看到这条通道是“空”的。
 
 ### 3.6 为什么共轭核 Φ̂ 为零
+{:data-toc-skip=''}
 
 **引理.** 若 $\hat\Phi^{(\ell)}=0$，则
 
@@ -580,6 +591,7 @@ $$
 $\hat\Phi$ 的 $O(1/N)$ 偏移对 $\log Z$ 的贡献会因 $S$ 在鞍点处的驻定性而相互抵消，因此不影响领头阶结果。直观上：只有 $O(1)$ 个神经元被 source 直接扰动，其余 $N-O(1)$ 个“体相”神经元在零 source 下完全相同，鞍点由体相决定，source 不会在领头阶改变宏观核。这也是 MSR 形式的一般性质：在零 source 下，response field 的关联 $\langle\hat h\hat h\rangle$ 为零，它保证了归一化 $Z[0]=1$。
 
 ### 3.7 单点有效理论：高斯过程
+{:data-toc-skip=''}
 
 令 $\hat\Phi^{(\ell)}=0$，在 $z_i^{(\ell)}$ 中先对 $\hat h$ 作高斯积分（设 $\Phi^{(\ell-1)}$ 正定）：
 
@@ -649,6 +661,7 @@ $$
 这就是 NNGP 的递推。
 
 ### 3.8 小结：DMFT 与 CLT 的对应
+{:data-toc-skip=''}
 
 把 DMFT 推导中的每一步与第 2.3 节的启发式论证对照：
 
@@ -768,6 +781,7 @@ $$
 因此初始化不仅影响梯度的尺度，还决定了网络在训练之前偏好的函数空间。下面看两个可以精确计算的例子。
 
 ### 5.1 线性激活
+{:data-toc-skip=''}
 
 若 $\phi(u)=u$ 且 $\sigma_b=0$，则 $\mathbb E[uv]=K^{(\ell-1)}(x,x')$，递推变成
 
@@ -786,6 +800,7 @@ $$
 即等宽情形下的 Xavier-like initialization [<a href="#ref6">6</a>]。同时可以看到：线性网络的 NNGP 核永远是线性核，深度只改变整体尺度，不改变函数先验的“形状”。
 
 ### 5.2 ReLU：对角元与 He 初始化
+{:data-toc-skip=''}
 
 若 $\phi(u)=\max(0,u)$，记对角元
 
@@ -827,6 +842,7 @@ $$
 这正是 He initialization [<a href="#ref7">7</a>] 的平均场解释：ReLU 把一半的输入置零，从而“丢掉”一半方差，权重方差需要加倍来补偿。
 
 ### 5.3 ReLU：非对角元与 arc-cosine 核
+{:data-toc-skip=''}
 
 ReLU 的非对角核也有闭式解。令
 
@@ -880,6 +896,7 @@ $$
 因此一个随机初始化的无穷宽 ReLU 网络对应一个完全确定的、逐层复合的 arc-cosine kernel。
 
 ### 5.4 深度极限：相关性的演化
+{:data-toc-skip=''}
 
 在 He 初始化（$\sigma_w^2=2,\ \sigma_b=0$）下，对角元保持不变 $q_\ell=q$，因此只需追踪两个输入之间的相关系数 $c_\ell=K^{(\ell)}(x,x')/q$。由 5.3 节，
 
@@ -921,21 +938,20 @@ NNGP 描述的是**随机初始化所诱导的函数先验**，而不是一般�
   ol.references { padding-left: 1.8em; }
   ol.references li { margin-bottom: 0.5em; scroll-margin-top: 5rem; }
   ol.references li:target { outline: 1px dashed var(--global-theme-color, #b509ac); outline-offset: 3px; border-radius: 3px; }
-  a.ref-back { margin-left: 0.35em; text-decoration: none; }
 </style>
 
 <ol class="references">
-  <li id="ref1">Radford M. Neal. <em>Priors for Infinite Networks</em>. In <em>Bayesian Learning for Neural Networks</em>, Lecture Notes in Statistics, vol. 118, Springer, 1996. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref2">Cengiz Pehlevan and Blake Bordelon. <em>Lecture Notes on Infinite-Width Limits of Neural Networks</em>. Princeton Machine Learning Summer School, 2023. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref3">Jaehoon Lee, Yasaman Bahri, Roman Novak, Samuel S. Schoenholz, Jeffrey Pennington, and Jascha Sohl-Dickstein. <em>Deep Neural Networks as Gaussian Processes</em>. ICLR, 2018. <a href="https://arxiv.org/abs/1711.00165">arXiv:1711.00165</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref4">Youngmin Cho and Lawrence K. Saul. <em>Kernel Methods for Deep Learning</em>. NeurIPS, 2009. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref5">Arthur Jacot, Franck Gabriel, and Clément Hongler. <em>Neural Tangent Kernel: Convergence and Generalization in Neural Networks</em>. NeurIPS, 2018. <a href="https://arxiv.org/abs/1806.07572">arXiv:1806.07572</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref6">Xavier Glorot and Yoshua Bengio. <em>Understanding the Difficulty of Training Deep Feedforward Neural Networks</em>. AISTATS, 2010. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref7">Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. <em>Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification</em>. ICCV, 2015. <a href="https://arxiv.org/abs/1502.01852">arXiv:1502.01852</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref8">Greg Yang and Edward J. Hu. <em>Tensor Programs IV: Feature Learning in Infinite-Width Neural Networks</em>. ICML, 2021. <a href="https://arxiv.org/abs/2011.14522">arXiv:2011.14522</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref9">Paul C. Martin, Eric D. Siggia, and Harvey A. Rose. <em>Statistical Dynamics of Classical Systems</em>. Physical Review A, 8(1):423, 1973. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref10">Daniel A. Roberts, Sho Yaida, and Boris Hanin. <em>The Principles of Deep Learning Theory</em>. Cambridge University Press, 2022. <a href="https://arxiv.org/abs/2106.10165">arXiv:2106.10165</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref11">Ben Poole, Subhaneil Lahiri, Maithra Raghu, Jascha Sohl-Dickstein, and Surya Ganguli. <em>Exponential Expressivity in Deep Neural Networks through Transient Chaos</em>. NeurIPS, 2016. <a href="https://arxiv.org/abs/1606.05340">arXiv:1606.05340</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref12">Samuel S. Schoenholz, Justin Gilmer, Surya Ganguli, and Jascha Sohl-Dickstein. <em>Deep Information Propagation</em>. ICLR, 2017. <a href="https://arxiv.org/abs/1611.01232">arXiv:1611.01232</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
-  <li id="ref13">Blake Bordelon and Cengiz Pehlevan. <em>Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks</em>. NeurIPS, 2022. <a href="https://arxiv.org/abs/2205.09653">arXiv:2205.09653</a>. <a class="ref-back" href="#" onclick="history.back(); return false;" title="返回正文">↩</a></li>
+  <li id="ref1">Radford M. Neal. <em>Priors for Infinite Networks</em>. In <em>Bayesian Learning for Neural Networks</em>, Lecture Notes in Statistics, vol. 118, Springer, 1996.</li>
+  <li id="ref2">Cengiz Pehlevan and Blake Bordelon. <em>Lecture Notes on Infinite-Width Limits of Neural Networks</em>. Princeton Machine Learning Summer School, 2023.</li>
+  <li id="ref3">Jaehoon Lee, Yasaman Bahri, Roman Novak, Samuel S. Schoenholz, Jeffrey Pennington, and Jascha Sohl-Dickstein. <em>Deep Neural Networks as Gaussian Processes</em>. ICLR, 2018. <a href="https://arxiv.org/abs/1711.00165">arXiv:1711.00165</a>.</li>
+  <li id="ref4">Youngmin Cho and Lawrence K. Saul. <em>Kernel Methods for Deep Learning</em>. NeurIPS, 2009.</li>
+  <li id="ref5">Arthur Jacot, Franck Gabriel, and Clément Hongler. <em>Neural Tangent Kernel: Convergence and Generalization in Neural Networks</em>. NeurIPS, 2018. <a href="https://arxiv.org/abs/1806.07572">arXiv:1806.07572</a>.</li>
+  <li id="ref6">Xavier Glorot and Yoshua Bengio. <em>Understanding the Difficulty of Training Deep Feedforward Neural Networks</em>. AISTATS, 2010.</li>
+  <li id="ref7">Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. <em>Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification</em>. ICCV, 2015. <a href="https://arxiv.org/abs/1502.01852">arXiv:1502.01852</a>.</li>
+  <li id="ref8">Greg Yang and Edward J. Hu. <em>Tensor Programs IV: Feature Learning in Infinite-Width Neural Networks</em>. ICML, 2021. <a href="https://arxiv.org/abs/2011.14522">arXiv:2011.14522</a>.</li>
+  <li id="ref9">Paul C. Martin, Eric D. Siggia, and Harvey A. Rose. <em>Statistical Dynamics of Classical Systems</em>. Physical Review A, 8(1):423, 1973.</li>
+  <li id="ref10">Daniel A. Roberts, Sho Yaida, and Boris Hanin. <em>The Principles of Deep Learning Theory</em>. Cambridge University Press, 2022. <a href="https://arxiv.org/abs/2106.10165">arXiv:2106.10165</a>.</li>
+  <li id="ref11">Ben Poole, Subhaneil Lahiri, Maithra Raghu, Jascha Sohl-Dickstein, and Surya Ganguli. <em>Exponential Expressivity in Deep Neural Networks through Transient Chaos</em>. NeurIPS, 2016. <a href="https://arxiv.org/abs/1606.05340">arXiv:1606.05340</a>.</li>
+  <li id="ref12">Samuel S. Schoenholz, Justin Gilmer, Surya Ganguli, and Jascha Sohl-Dickstein. <em>Deep Information Propagation</em>. ICLR, 2017. <a href="https://arxiv.org/abs/1611.01232">arXiv:1611.01232</a>.</li>
+  <li id="ref13">Blake Bordelon and Cengiz Pehlevan. <em>Self-Consistent Dynamical Field Theory of Kernel Evolution in Wide Neural Networks</em>. NeurIPS, 2022. <a href="https://arxiv.org/abs/2205.09653">arXiv:2205.09653</a>.</li>
 </ol>
