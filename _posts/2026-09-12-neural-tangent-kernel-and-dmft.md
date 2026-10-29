@@ -803,7 +803,7 @@ $L$ 个隐藏层与一个 readout 各贡献一份输入核，这核对了参数�
 
 ## 6. 小结
 
-本文在 NTK parameterization 下得到了一幅完整而可解的图景：
+本文在 NTK parameterization 下得到了如下物理图像：
 
 - **初始化**：前向场 $h$ 与 pre-gradient $z$ 是相互独立的高斯场；权重复用产生的响应序参量为零。
 - **极限 NTK**：$\Theta_\infty$ 由前向核 $\Phi$、导数核 $\Psi$ 与反向核 $G$ 逐层组合而成，是一个确定性的矩阵。
