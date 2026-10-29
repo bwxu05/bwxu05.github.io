@@ -5,8 +5,8 @@ date: 2026-09-12
 description: 无穷宽神经网络的训练动力学：NTK 的 DMFT 推导
 tags: pre-training scaling muP DMFT NTK
 categories: muP-Theory DMFT-Tutorial
-toc:
-  beginning: true
+chart:
+  chartjs: true
 ---
 
 [上一篇]({% post_url 2026-08-09-nngp-initialization %}) 讨论了随机初始化：在无穷宽极限下，每个神经元的 preactivation 是高斯的，整个网络在初始化时是一个以 NNGP 核为协方差的高斯过程。那篇文章回答的是“训练开始之前，网络是一个什么样的函数”。本文接着回答下一个问题：**当所有层的参数都参与梯度下降时，网络的预测如何随时间演化？**

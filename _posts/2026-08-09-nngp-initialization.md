@@ -5,8 +5,6 @@ date: 2026-08-09
 description: 无穷宽神经网络的随机初始化：NNGP 的 DMFT 推导
 tags: pre-training scaling muP DMFT
 categories: muP-Theory DMFT-Tutorial
-toc:
-  beginning: true
 chart:
   chartjs: true
 ---
