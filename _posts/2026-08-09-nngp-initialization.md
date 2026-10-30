@@ -13,7 +13,7 @@ chart:
 
 由于权重是随机的，网络输出 $f(x)$ 对每个输入 $x$ 都是一个随机变量；参数的分布于是诱导出一个**函数空间上的分布**。经典结论是：在合适的初始化标度下，当隐藏层宽度趋于无穷时，这个函数分布收敛到一个高斯过程 (Gaussian process, GP)，其协方差核称为 **Neural Network Gaussian Process (NNGP) kernel** [<a href="#ref1">1</a>, <a href="#ref2">2</a>, <a href="#ref3">3</a>]。
 
-Lee et al. [<a href="#ref3">3</a>] 用逐层中心极限定理 (CLT) 给出了经典推导。本文采用统计物理中更“平均场”的视角：把随机初始化的权重视为 **quenched disorder**（淬火无序），用处理高维无序系统的 Dynamical Mean-Field Theory (DMFT) 对无序求平均，再在 $N\to\infty$ 时作鞍点近似，得到单个神经元的有效理论。这一推导与 Pehlevan–Bordelon 讲义 [<a href="#ref2">2</a>] Appendix A 的思路一致。
+Lee et al. [<a href="#ref3">3</a>] 用逐层中心极限定理 (CLT) 给出了经典推导。本文采用统计物理中“平均场”的视角：把随机初始化的权重视为 **quenched disorder**（淬火无序），用处理高维无序系统的 Dynamical Mean-Field Theory (DMFT) 对无序求平均，再在 $N\to\infty$ 时作鞍点近似，得到单个神经元的有效理论。这一推导与 Pehlevan–Bordelon 讲义 [<a href="#ref2">2</a>] Appendix A 的思路一致。
 
 严格地说，NNGP 只涉及初始化，并没有真实的时间变量；它可以看作完整训练动力学 DMFT 在 $t=0$ 时的“静态平均场”结果。之所以用 DMFT 这套看起来有些“重”的工具来推导一个静态结论，是因为同一套工具（MSR 共轭场、序参量、鞍点）在研究训练动力学时可以推广到 feature learning 场景。
 
@@ -26,7 +26,7 @@ Lee et al. [<a href="#ref3">3</a>] 用逐层中心极限定理 (CLT) 给出了�
 
 ---
 
-## 1. 初始化标度：为什么是 1/√N？
+## 1. 初始化 scaling：为什么是 1/√N？
 
 ### 1.1 网络与记号
 {:data-toc-skip=''}
@@ -146,7 +146,7 @@ $$
 
 ---
 
-## 2. 无穷宽极限：先看结论
+## 2. 无穷宽极限：NNGP 
 
 ### 2.1 特征核
 {:data-toc-skip=''}
@@ -199,7 +199,7 @@ $$
 
 这已经是 NNGP 核的递推形式。
 
-### 2.3 启发式理由：条件高斯 + 大数定律
+### 2.3 启发式推导：条件高斯 + 大数定律
 {:data-toc-skip=''}
 
 在进入 DMFT 之前，先看一个几乎能直接给出结论的观察。以第 $\ell-1$ 层为条件，
@@ -661,12 +661,12 @@ $$
 ### 3.8 小结：DMFT 与 CLT 的对应
 {:data-toc-skip=''}
 
-把 DMFT 推导中的每一步与第 2.3 节的启发式论证对照：
+把 DMFT 推导中的每一步与第 2.3 节的启发式推导对照：
 
 - **对 $W$ 求平均**（3.3 节）$\;\longleftrightarrow\;$ 以上一层为条件时 preactivation 精确高斯，协方差为 $\Phi^{(\ell-1)}$；
 - **引入序参量并解耦**（3.4 节）$\;\longleftrightarrow\;$ 以 $\Phi$ 为条件时，各神经元条件独立；
 - **鞍点近似**（3.5 节）$\;\longleftrightarrow\;$ 大数定律：$\Phi$ 自平均到确定值；
-- **鞍点附近的二阶涨落** $\;\longleftrightarrow\;$ 有限宽修正：$\Phi$ 的涨落为 $O(N^{-1/2})$，由此诱导的核修正与非高斯性（如四阶连通关联）为 $O(1/N)$，参见 [<a href="#ref10">10</a>]。
+- **鞍点附近的二阶涨落** $\;\longleftrightarrow\;$ 有限宽修正：$\Phi$ 的涨落为 $O(N^{-1/2})$，由此诱导的核修正与非高斯性为 $O(1/N)$，参见 [<a href="#ref10">10</a>]。
 
 Lee et al. [<a href="#ref3">3</a>] 的 CLT 推导与上面的 DMFT 推导得到完全相同的递推：CLT 逐层证明高斯性；DMFT 则把高斯性、自平均性以及（下一步的）有限宽修正统一在同一个鞍点展开的框架中。
 
@@ -689,7 +689,7 @@ W_{ij}^{(\ell)}
 W_{ij}^{(\ell)},\,b_i^{(\ell)}\overset{\mathrm{i.i.d.}}{\sim}\mathcal N(0,1).
 $$
 
-**在 DMFT 中加入 bias.** 3.2 节的推导完全照搬，只是指数中多出一项 $-i\sigma_b\sum_{\mu,i}\hat h_{\mu i}^{(\ell)}b_i^{(\ell)}$。注意 bias 对所有输入 $\mu$ 共享。对 $b_i^{(\ell)}$ 求平均：
+**在 DMFT 中加入 bias.** 3.2 节的推导完全类似，只是指数中多出一项 $-i\sigma_b\sum_{\mu,i}\hat h_{\mu i}^{(\ell)}b_i^{(\ell)}$。注意 bias 对所有输入 $\mu$ 共享。对 $b_i^{(\ell)}$ 求平均：
 
 $$
 \mathbb E_{b}\exp\Bigl(-i\sigma_b b_i^{(\ell)}\sum_\mu\hat h_{\mu i}^{(\ell)}\Bigr)
