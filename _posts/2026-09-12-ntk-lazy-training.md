@@ -55,7 +55,7 @@ $$
 
 初始化时 $W_{ij}^{(\ell)}(0)$ 与 $a_i(0)$ 相互独立，且都服从 $\mathcal N(0,1)$。优化变量是这些 **raw parameters**，而 $D^{-1/2}$、$N^{-1/2}$ 是写在前向计算里的显式因子。对 raw parameters 使用与宽度无关的统一学习率，就是本文所说的 NTK parameterization [<a href="#ref1">1</a>, <a href="#ref5">5</a>]。
 
-> **注（参数化与学习率）.** 上一篇第 1 节指出，满足 $2\alpha+\beta=1$ 的不同写法在**初始化时**等价。训练时则不然。例如 standard parameterization 把隐藏层写成 $h=\sum_jW'_{ij}\phi_j$，取 $W'_{ij}=W_{ij}/\sqrt N\sim\mathcal N(0,1/N)$。由链式法则 $\partial\mathcal L/\partial W'=\sqrt N\,\partial\mathcal L/\partial W$，所以对 $W'$ 用学习率 $\eta$ 做梯度下降，等价于对 raw parameter $W$ 用学习率 $N\eta$。因此改变参数坐标而保持数值相同的学习率，一般会改变训练动力学。本文始终在 raw parameter 坐标下讨论，学习率 $\eta$ 与宽度无关。
+> **注（参数化与学习率）.** 上一篇第 1 节指出，满足 $$2\alpha+\beta=1$$ 的不同写法在**初始化时**等价。训练时则不然。例如 standard parameterization 把隐藏层写成 $$h=\sum_jW'_{ij}\phi_j$$，取 $$W'_{ij}=W_{ij}/\sqrt N\sim\mathcal N(0,1/N)$$。由链式法则 $$\partial\mathcal L/\partial W'=\sqrt N\,\partial\mathcal L/\partial W$$，所以对 $$W'$$ 用学习率 $$\eta$$ 做梯度下降，等价于对 raw parameter $$W$$ 用学习率 $$N\eta$$。因此改变参数坐标而保持数值相同的学习率，一般会改变训练动力学。本文始终在 raw parameter 坐标下讨论，学习率 $$\eta$$ 与宽度无关。
 
 采用平均平方损失与 full-batch gradient flow。记残差 $\Delta_\mu=y_\mu-f_\mu$，则
 
@@ -747,7 +747,7 @@ $$
 
 它对**参数增量**是线性的，对**输入**仍然是非线性的 [<a href="#ref5">5</a>, <a href="#ref6">6</a>]。Chizat et al. [<a href="#ref6">6</a>] 进一步指出，laziness 本质上来自标度而不是宽度本身：任何可微模型，只要输出被放大、学习率相应缩小，都会进入这一线性化区域。下一篇会从相反的方向看到这一点：把输出缩小、学习率放大，就能离开这一区域。
 
-### 4.5 NNGP 与 NTK 的分工
+### 4.5 NNGP 与 NTK 的关系
 {:data-toc-skip=''}
 
 两个核扮演不同的角色。初始化时 $f_0(x)=N^{-1/2}\sum_ia_i(0)\phi(h_i^{(L)}(x))$，由上一篇的结果，
