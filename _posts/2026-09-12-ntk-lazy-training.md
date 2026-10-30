@@ -219,7 +219,7 @@ $$
 
 在进入 DMFT 之前，先用量级估计看看训练中各个量变化多快。设 $\Delta,\phi,g$ 都是 $O(1)$：
 
-| 量 | 变化速度 | 理由 |
+| 物理量 | 变化速度 | 理由 |
 |:--|:--:|:--|
 | 单个隐藏层权重 $W_{ij}^{(\ell)}$ | $O(N^{-1})$ | $\partial f/\partial W_{ij}=g_i\phi_j/N$ |
 | 单个 readout 权重 $a_i$ | $O(N^{-1/2})$ | $\partial f/\partial a_i=\phi_i/\sqrt N$ |
